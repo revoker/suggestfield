@@ -11,7 +11,7 @@ import org.vaadin.suggestfield.SuggestField.NewItemsHandler;
 import org.vaadin.suggestfield.SuggestField.SuggestionHandler;
 import org.vaadin.suggestfield.SuggestField.TokenHandler;
 
-import com.vaadin.data.validator.EmailValidator;
+import com.vaadin.v7.data.validator.EmailValidator;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;
 import com.vaadin.server.FontAwesome;

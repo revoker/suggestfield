@@ -1,6 +1,6 @@
 package org.vaadin.suggestfield.client;
 
-import com.vaadin.shared.AbstractFieldState;
+import com.vaadin.v7.shared.AbstractFieldState;
 
 @SuppressWarnings("serial")
 public class SuggestFieldState extends AbstractFieldState {

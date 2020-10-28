@@ -49,7 +49,7 @@ import com.vaadin.client.ApplicationConnection;
 import com.vaadin.client.BrowserInfo;
 import com.vaadin.client.Util;
 import com.vaadin.client.ui.VOverlay;
-import com.vaadin.client.ui.VTextField;
+import com.vaadin.v7.client.ui.VTextField;
 
 public class VSuggestField extends Composite implements HasText, Focusable,
 		HasEnabled, HasAllKeyHandlers, HasValue<String>,
@@ -86,15 +86,15 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 	public boolean trimQuery = true;
 	public int minimumQueryCharacters = 3;
 	private SuggestFieldSuggestion currentSuggestion;
-	
+
 	public String popupWidth = null;
 	public boolean allowNewItem;
-	
+
 	public int keyCode = -1;
 	public int[] modifierKeys = new int[] {};
-	
+
 	public boolean tokenMode = false;
-	
+
 	/*
 	 * Callback for selecting suggestion
 	 */
@@ -134,7 +134,7 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 	}
 
 	/*
-	 * Delayed loading from server 
+	 * Delayed loading from server
 	 */
 	private class SuggestionTimer extends Timer {
 
@@ -187,7 +187,7 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 //					VConsole.error("Key down");
 					return;
 				}
-				
+
 				switch (event.getNativeKeyCode()) {
 				case KeyCodes.KEY_DOWN:
 					moveSelectionDown();
@@ -205,9 +205,9 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 //						 */
 //						if (allowNewItem) {
 //							handleNewSuggestion();
-//						} 
+//						}
 //						hideSuggestions();
-//						
+//
 //					} else {
 //						setNewSelection(suggestion);
 //					}
@@ -251,7 +251,7 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 		box.addValueChangeHandler(events);
 		box.addBlurHandler(events);
 	}
-	
+
 	private void handleOnKeyEvent() {
 		Suggestion suggestion = getCurrentSelection();
 		if (suggestion == null) {
@@ -260,14 +260,14 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 			 */
 			if (allowNewItem) {
 				handleNewSuggestion();
-			} 
+			}
 			hideSuggestions();
-			
+
 		} else {
 			setNewSelection(suggestion);
 		}
 	}
-	
+
 	private void handleNewSuggestion() {
 		if (suggestionListener != null && box.getText().length() >= minimumQueryCharacters ) {
 			/*
@@ -279,16 +279,16 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 			}
 		}
 	}
-	
+
 	private boolean hasShortCut() {
 		return (keyCode != -1);
 	}
-	
+
 	private boolean isValidShortCut(KeyDownEvent event) {
 		boolean result = false;
 		if (event.getNativeEvent().getKeyCode() == keyCode) {
 			event.isAnyModifierKeyDown();
-			
+
 			//modifiers
 			if (modifierKeys.length > 0) {
 				/*
@@ -296,7 +296,7 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 				 *  public static final int CTRL = 17;
 				 *  public static final int ALT = 18;
 				 *  public static final int META = 91;
-				 *  
+				 *
 				 */
 				ArrayList<Integer> pressed = new ArrayList<Integer>();
 				if (event.getNativeEvent().getShiftKey()) {
@@ -304,16 +304,16 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 				}
 				if (event.getNativeEvent().getCtrlKey()) {
 					pressed.add(17);
-				} 
+				}
 				if (event.getNativeEvent().getAltKey()) {
 					pressed.add(18);
-				} 
+				}
 				if (event.getNativeEvent().getMetaKey()) {
 					pressed.add(91);
 				}
-				
+
 				if (pressed.size() == modifierKeys.length) {
-					
+
 					boolean mod = true;
 					for (int i=0; i<modifierKeys.length; i++) {
 						if (!pressed.contains(modifierKeys[i])) {
@@ -323,8 +323,8 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 					}
 					result = mod;
 				}
-				
-				
+
+
 			} else {
 				result = true;
 			}
@@ -428,19 +428,19 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 		hideSuggestions();
 		fireSuggestionEvent(curSuggestion);
 	}
-	
+
 	/*
-	 * 
+	 *
 	 * Used by connector
 	 */
 	public void setFindSuggestionsListener(FindSuggestionsListener listener) {
 		this.suggestionListener = listener;
 	}
-	
+
 	public void setInputPrompt(String inputPrompt) {
 		box.setInputPrompt(inputPrompt);
 	}
-	
+
 	public HandlerRegistration addKeyDownHandler(KeyDownHandler handler) {
 		return addDomHandler(handler, KeyDownEvent.getType());
 	}
@@ -520,7 +520,7 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 
 	/*
 	 * Inline suggestion display
-	 * 
+	 *
 	 * ==========================================================================
 	 */
 	protected Suggestion getCurrentSelection() {
@@ -567,7 +567,7 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 	}
 
 	/*
-	 * 
+	 *
 	 * ==========================================================================
 	 */
 
@@ -606,6 +606,11 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 			setPopupPositionAndShow(this);
 		}
 
+            @Override
+            public void onClose(com.google.gwt.event.logical.shared.CloseEvent<com.google.gwt.user.client.ui.PopupPanel> event) {
+                // super.close(event);
+            }
+
 		@Override
 		protected ApplicationConnection getApplicationConnection() {
 			return super.getApplicationConnection();
@@ -626,7 +631,7 @@ public class VSuggestField extends Composite implements HasText, Focusable,
 				} catch (NumberFormatException e) {
 					desiredWidth = box.getOffsetWidth();
 				}
-				
+
 			}
 			Element menuFirstChild = getWidget().getElement().getFirstChild()
 					.cast();

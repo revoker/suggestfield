@@ -9,28 +9,28 @@ import org.vaadin.suggestfield.client.SuggestFieldServerRpc;
 import org.vaadin.suggestfield.client.SuggestFieldState;
 import org.vaadin.suggestfield.client.SuggestFieldSuggestion;
 
-import com.vaadin.data.Validator.InvalidValueException;
-import com.vaadin.data.util.converter.Converter.ConversionException;
+import com.vaadin.v7.data.Validator.InvalidValueException;
+import com.vaadin.v7.data.util.converter.Converter.ConversionException;
 import com.vaadin.event.FieldEvents.BlurEvent;
 import com.vaadin.event.FieldEvents.BlurListener;
-import com.vaadin.event.FieldEvents.BlurNotifier;
+import com.vaadin.v7.event.FieldEvents.BlurNotifier;
 import com.vaadin.event.FieldEvents.FocusAndBlurServerRpcImpl;
 import com.vaadin.event.FieldEvents.FocusEvent;
 import com.vaadin.event.FieldEvents.FocusListener;
-import com.vaadin.event.FieldEvents.FocusNotifier;
-import com.vaadin.ui.AbstractField;
+import com.vaadin.v7.event.FieldEvents.FocusNotifier;
+import com.vaadin.v7.ui.AbstractField;
 import com.vaadin.ui.Component.Focusable;
 
 @SuppressWarnings("serial")
 public class SuggestField extends AbstractField<Object> implements
 		SuggestFieldServerRpc, Focusable, BlurNotifier, FocusNotifier {
-	
+
 	/**
-	 * This handler must be implemented 
+	 * This handler must be implemented
 	 *
 	 */
 	public interface SuggestionHandler extends Serializable {
-		
+
 		/**
 		 * Provide suggestions based on query string
 		 * @param query Search string
@@ -38,7 +38,7 @@ public class SuggestField extends AbstractField<Object> implements
 		 */
 		public List<Object> searchItems(String query);
 	}
-	
+
 	public interface NewItemsHandler extends Serializable {
 		/**
 		 * Provide new suggestion based on newItemText
@@ -47,19 +47,19 @@ public class SuggestField extends AbstractField<Object> implements
 		 */
 		public Object addNewItem(String newItemText);
 	}
-	
+
 	public interface SuggestionConverter extends Serializable {
-		
+
 		public SuggestFieldSuggestion toSuggestion(Object item);
-		
+
 		public Object toItem(SuggestFieldSuggestion suggestion);
-		
+
 	}
-	
+
 	public interface TokenHandler extends Serializable {
 		public void handleToken(Object token);
 	}
-	
+
 	FocusAndBlurServerRpcImpl focusBlurRpc = new FocusAndBlurServerRpcImpl(this) {
 
 		private static final long serialVersionUID = -780524775769549747L;
@@ -69,7 +69,7 @@ public class SuggestField extends AbstractField<Object> implements
 			SuggestField.this.fireEvent(event);
 		}
 	};
-	
+
 	private SuggestionConverter suggestionConverter = new StringSuggestionConverter();
 	private SuggestionHandler suggestionHandler;
 	private NewItemsHandler newItemsHandler;
@@ -117,7 +117,7 @@ public class SuggestField extends AbstractField<Object> implements
 			}
 		}
 	}
-	
+
 	@Override
 	public void addNewSuggestion(String suggestion) {
 		if (getNewItemsHandler() != null) {
@@ -128,16 +128,16 @@ public class SuggestField extends AbstractField<Object> implements
 			}
 		}
 	}
-	
-	
+
+
 	@Override
 	protected void setValue(Object newFieldValue, boolean repaintIsNotNeeded)
-			throws com.vaadin.data.Property.ReadOnlyException,
+			throws com.vaadin.v7.data.Property.ReadOnlyException,
 			ConversionException, InvalidValueException {
-		
+
 		super.setValue(newFieldValue, repaintIsNotNeeded);
 	}
-	
+
 	@Override
 	protected void setInternalValue(Object newValue) {
 		super.setInternalValue(newValue);
@@ -156,23 +156,23 @@ public class SuggestField extends AbstractField<Object> implements
 			}
 		}
 	}
-	
+
 
 	public void setDelay(int delayMillis) {
 		getState().delayMillis = delayMillis;
 	}
-	
+
 	public void setTokenMode(boolean tokenMode) {
 		getState().tokenMode = tokenMode;
 	}
-	
+
 	public boolean getTokenMode() {
 		return getState().tokenMode;
 	}
 
 	/**
 	 * Gets the current input prompt.
-	 * 
+	 *
 	 * @see #setInputPrompt(String)
 	 * @return the current input prompt, or null if not enabled
 	 */
@@ -183,7 +183,7 @@ public class SuggestField extends AbstractField<Object> implements
 	/**
 	 * Sets the input prompt - a textual prompt that is displayed when the field
 	 * would otherwise be empty, to prompt the user for input.
-	 * 
+	 *
 	 * @param inputPrompt
 	 *            inpitprompth
 	 */
@@ -199,7 +199,7 @@ public class SuggestField extends AbstractField<Object> implements
 	public void setTrimQuery(boolean trimQuery) {
 		getState().trimQuery = trimQuery;
 	}
-	
+
 	/**
 	 * Set width of popup. Width must be in <code>px</code>. For auto-width set <code>0</code> value.
 	 * @param width Popup Width in px
@@ -211,7 +211,7 @@ public class SuggestField extends AbstractField<Object> implements
 			getState().popupWidth = width + "px";
 		}
 	}
-	
+
 	/**
 	 * Return current popup width.
 	 * @return <code>null</code> if is auto width.
@@ -219,10 +219,10 @@ public class SuggestField extends AbstractField<Object> implements
 	public String getPopupWidth() {
 		return getState().popupWidth;
 	}
-	
+
 	/**
      * Does the select allow adding new options by the user.
-     * 
+     *
      * @return True if additions are allowed.
      */
     public boolean isNewItemsAllowed() {
@@ -231,21 +231,21 @@ public class SuggestField extends AbstractField<Object> implements
 
     /**
      * Enables or disables possibility to add new items by the user.
-     * 
+     *
      * @param allowNewItems <code>true</code> or <code>false</code>
-     * 
+     *
      */
     public void setNewItemsAllowed(boolean allowNewItems) {
     	getState().allowNewItem = allowNewItems;
     }
-    
+
     /**
      * Set ShortCut keys combination to be handled on client side. <br>
      * ShortCut has same effect as Enter of Tab key. <br>
      * To disable ShorCut set values <code>-1, new int[0]</code> <br>
      * Example <br>
      * <code>setShortCut(ShortcutAction.KeyCode.S, new int[] { ShortcutAction.ModifierKey.CTRL })</code>
-     * 
+     *
      * @param keyCode
      * @param modifierKeys
      */
@@ -253,12 +253,12 @@ public class SuggestField extends AbstractField<Object> implements
     	getState().keyCode = keyCode;
     	getState().modifierKeys = modifierKeys;
     }
-	
+
 	@Override
 	public void focus() {
 		super.focus();
 	}
-    
+
     public void setSuggestionHandler(SuggestionHandler suggestionHandler) {
     	this.suggestionHandler = suggestionHandler;
     }
@@ -269,52 +269,26 @@ public class SuggestField extends AbstractField<Object> implements
 				FocusListener.focusMethod);
 	}
 
-	@Deprecated
-	@Override
-	public void addListener(FocusListener listener) {
-		addFocusListener(listener);
-		
-	}
-
 	@Override
 	public void removeFocusListener(FocusListener listener) {
 		removeListener(FocusEvent.EVENT_ID, FocusEvent.class, listener);
-		
-	}
 
-	@Deprecated
-	@Override
-	public void removeListener(FocusListener listener) {
-		removeFocusListener(listener);
-		
 	}
 
 	@Override
 	public void addBlurListener(BlurListener listener) {
 		addListener(BlurEvent.EVENT_ID, BlurEvent.class, listener,
 				BlurListener.blurMethod);
-		
-	}
 
-	@Deprecated
-	@Override
-	public void addListener(BlurListener listener) {
-		addBlurListener(listener);
-		
 	}
 
 	@Override
 	public void removeBlurListener(BlurListener listener) {
 		removeListener(BlurEvent.EVENT_ID, BlurEvent.class, listener);
-		
+
 	}
 
-	@Deprecated
-	@Override
-	public void removeListener(BlurListener listener) {
-		removeBlurListener(listener);	
-	}
-	
+
 	public SuggestionConverter getSuggestionConverter() {
 		return suggestionConverter;
 	}
@@ -339,5 +313,5 @@ public class SuggestField extends AbstractField<Object> implements
 		this.tokenHandler = tokenHandler;
 	}
 
-	
+
 }
